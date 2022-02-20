@@ -37,6 +37,9 @@ where you need to write the Orbis username and password and Ateneo credentials (
 
 ### Usage
 
-Simply run the [`notebook`](https://github.com/AleBitetto/Scraping_from_Orbis/blob/master/Scraping%20from%20Orbis.ipynb).
+Simply run the [notebook](https://github.com/AleBitetto/Scraping_from_Orbis/blob/master/Scraping%20from%20Orbis.ipynb).
+
+### Notes
 
 Current version works with the Italian language settings and Orbis settings as described in the notebook.
+[Katalon Recorder](https://www.katalon.com/resources-center/blog/katalon-automation-recorder/) extension has been used in order to manually record the steps and convert them into Selenium code.
