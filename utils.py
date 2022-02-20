@@ -87,6 +87,7 @@ def scrape_from_Orbis(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None, 
                      Orbis_landing_page=None, Orbis_username=None, Orbis_pass=None, Orbis_saved_search=None,
                       Orbis_columns_set=None, maximum_chunk_size=None):
     
+    SMALL_TIME_SLEEP = 0.5
     start = timer()
 
     # open browser and go to website
@@ -134,7 +135,7 @@ def scrape_from_Orbis(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None, 
 
     # split into chunks
     total_rows = int(driver.find_element_by_id('records-count').get_attribute('data-total-records-count'))
-    print("Total record found:", str(total_rows))
+    print("Total records found:", str(total_rows))
     rows = range(1,total_rows+1)
     chunk_index = [(rows[i:i+maximum_chunk_size][0], rows[i:i+maximum_chunk_size][-1]) for i in range(0, len(rows), maximum_chunk_size)]
     print("Splitting into", len(chunk_index), "chunks")
@@ -148,52 +149,50 @@ def scrape_from_Orbis(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None, 
         row_end = chunk[1]
 
         driver.find_element_by_link_text("Excel").click()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_xpath("//div[@id='export-component-exportoptions']/div/a/img").click()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_xpath("//label[@name='component.SearchStrategy']").click()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_xpath("//div[@id='export-component-exportoptions']/div/a/img").click()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_id("component_selectedFormatId").click()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         Select(driver.find_element_by_id("component_selectedFormatId")).select_by_visible_text(Orbis_columns_set)
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_id("component_RangeOptionSelectedId").click()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_id("component_RangeOptionSelectedId").click()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         Select(driver.find_element_by_id("component_RangeOptionSelectedId")).select_by_visible_text(u"Un gruppo di società")
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_name("component.From").click()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_name("component.From").clear()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_name("component.From").send_keys(str(row_start))
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_name("component.To").click()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_name("component.To").clear()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_name("component.To").send_keys(str(row_end))
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_id("component_FileName").click()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_id("component_FileName").clear()
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_id("component_FileName").send_keys("Chunk_"+str(chunk_i+1).zfill(3))
-        time.sleep(1)
+        time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_link_text("Esporta").click()
         time.sleep(5)
         driver.find_element_by_xpath("//img[@alt='X']").click()
         time.sleep(10)
         
     print('\n\nTotal elapsed time:', str(datetime.timedelta(seconds=round(timer()-start))))
-    print('\nBrowser can be closed')
+    print('\nBrowser can be closed. If exported files are not automatically downloaded, please check the Orbis "Export" tab in browser.')
     
     # disconnect
-    time.sleep(60*3)
-    driver.find_element_by_xpath("//img[2]").click()
-    driver.find_element_by_link_text("Disconnetti").click()
-
-    print('\nTotal elapsed time:', str(datetime.timedelta(seconds=round(timer()-start))))
+    #     time.sleep(60*3)
+    #     driver.find_element_by_xpath("//img[2]").click()
+    #     driver.find_element_by_link_text("Disconnetti").click()
