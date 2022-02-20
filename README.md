@@ -1,4 +1,4 @@
-# Scraping_Orbis
+# Scraping from Orbis
 Python notebook to scrape data from Orbis
 
 ### Installation
