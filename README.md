@@ -1,5 +1,5 @@
 # Scraping from Orbis
-Python notebook to scrape data from Orbis
+Python notebook to scrape data from Orbis.
 
 ### Installation
 
@@ -13,7 +13,7 @@ This requires a `chromedriver` executable which can be downloaded [here](https:/
 
 ### Credentials
 
-Credentials must be input manually into a `config.py` file. Create a text file with the following lines:
+Credentials must be inputed manually into a `config.py` file. Create a text file with the following lines:
 ```
 Orbis_username = "username"
 Orbis_pass = "password"
