@@ -129,7 +129,7 @@ def scrape_from_Orbis(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None, 
     time.sleep(2)
     print("Showing results...", end ="")
     driver.find_element_by_xpath("//div[@id='tooltabSectionload-search-section']/div/div[2]/div/div/div[2]//span[@title='"+Orbis_saved_search+"']").click()
-    time.sleep(10)
+    time.sleep(30)
     driver.find_element_by_xpath("//img[@alt='Risultati']").click()
     print("OK", end ="\n")
 
