@@ -195,6 +195,11 @@ def scrape_from_Orbis(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None, 
     print('\n\nTotal elapsed time:', str(datetime.timedelta(seconds=round(timer()-start))))
     print('\nBrowser can be closed. If exported files are not automatically downloaded, please check the Orbis "Export" tab in browser.')
     
+    # save list of chunks' rows
+    with open('Chunks_list.txt', 'w') as f:
+        f.write('\n'.join(['Chunk ' + str(ind+1) + ': ' + '-'.join([str(i) for i in x]) for ind, x in enumerate(chunk_index)]))
+    print('\n\nChunks list saved into "Chunks_list.txt"')
+    
     # disconnect
     #     time.sleep(60*3)
     #     driver.find_element_by_xpath("//img[2]").click()
