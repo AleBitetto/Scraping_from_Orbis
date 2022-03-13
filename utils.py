@@ -85,7 +85,7 @@ def get_chromedriver(chromedriver_path=None, use_proxy=False, user_agent=None,
 
 def scrape_from_Orbis(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None, PROXY_USER=None, PROXY_PASS=None,
                      Orbis_landing_page=None, Orbis_username=None, Orbis_pass=None, Orbis_saved_search=None,
-                      Orbis_columns_set=None, maximum_chunk_size=None):
+                      Orbis_columns_set=None, maximum_chunk_size=None, time_before_closing_download=60):
     
     SMALL_TIME_SLEEP = 0.5
     start = timer()
@@ -185,8 +185,11 @@ def scrape_from_Orbis(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None, 
         driver.find_element_by_id("component_FileName").send_keys("Chunk_"+str(chunk_i+1).zfill(3))
         time.sleep(SMALL_TIME_SLEEP)
         driver.find_element_by_link_text("Esporta").click()
-        time.sleep(5)
-        driver.find_element_by_xpath("//img[@alt='X']").click()
+        time.sleep(time_before_closing_download)
+        try:
+            driver.find_element_by_xpath("//img[@alt='X']").click()
+        except:
+            pass
         time.sleep(10)
         
     print('\n\nTotal elapsed time:', str(datetime.timedelta(seconds=round(timer()-start))))
