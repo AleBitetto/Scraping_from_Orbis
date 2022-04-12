@@ -85,8 +85,10 @@ def get_chromedriver(chromedriver_path=None, use_proxy=False, user_agent=None,
 
 def scrape_from_Orbis(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None, PROXY_USER=None, PROXY_PASS=None,
                      Orbis_landing_page=None, Orbis_username=None, Orbis_pass=None, Orbis_saved_search=None,
-                      Orbis_columns_set=None, maximum_chunk_size=None, time_before_closing_download=60):
+                     Orbis_columns_set=None, maximum_chunk_size=None, time_before_closing_download=60,
+                     resume_from_chunk=-1):
     
+    LOG_FILE = 'Chunks_list.txt'
     SMALL_TIME_SLEEP = 0.5
     start = timer()
 
@@ -110,6 +112,7 @@ def scrape_from_Orbis(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None, 
     driver.find_element_by_xpath("//div[@id='loginPage']/div[2]/div[3]/button").click()
     time.sleep(2)
     driver.find_element_by_xpath("//input[@value='Accept']").click()
+    # check for session restart
     try:
         driver.find_element_by_xpath("//input[@value='Restart']").click()
         print("SESSION RESTART DONE", end ="\n")
@@ -140,65 +143,85 @@ def scrape_from_Orbis(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None, 
     chunk_index = [(rows[i:i+maximum_chunk_size][0], rows[i:i+maximum_chunk_size][-1]) for i in range(0, len(rows), maximum_chunk_size)]
     print("Splitting into", len(chunk_index), "chunks")
 
+    # delete log file
+    if os.path.exists(LOG_FILE):
+        os.remove(LOG_FILE)
+    
     # export chunks into excel files
     for chunk_i, chunk in enumerate(chunk_index):
 
-        print("Querying chunk", str(chunk_i+1), "/", str(len(chunk_index)), end = "\r")
+        # save list of chunks' rows
+        with open(LOG_FILE, 'a') as f:
+            f.write('\nChunk ' + str(chunk_i+1) + ': ' + '-'.join([str(i) for i in chunk]))
+        
+        if chunk_i >= resume_from_chunk:
+            print("Querying chunk", str(chunk_i+1), "/", str(len(chunk_index)), end = "\r")
 
-        row_start = chunk[0]
-        row_end = chunk[1]
+            row_start = chunk[0]
+            row_end = chunk[1]
 
-        driver.find_element_by_link_text("Excel").click()
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_xpath("//div[@id='export-component-exportoptions']/div/a/img").click()
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_xpath("//label[@name='component.SearchStrategy']").click()
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_xpath("//div[@id='export-component-exportoptions']/div/a/img").click()
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_id("component_selectedFormatId").click()
-        time.sleep(SMALL_TIME_SLEEP)
-        Select(driver.find_element_by_id("component_selectedFormatId")).select_by_visible_text(Orbis_columns_set)
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_id("component_RangeOptionSelectedId").click()
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_id("component_RangeOptionSelectedId").click()
-        time.sleep(SMALL_TIME_SLEEP)
-        Select(driver.find_element_by_id("component_RangeOptionSelectedId")).select_by_visible_text(u"Un gruppo di società")
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_name("component.From").click()
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_name("component.From").clear()
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_name("component.From").send_keys(str(row_start))
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_name("component.To").click()
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_name("component.To").clear()
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_name("component.To").send_keys(str(row_end))
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_id("component_FileName").click()
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_id("component_FileName").clear()
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_id("component_FileName").send_keys("Chunk_"+str(chunk_i+1).zfill(3))
-        time.sleep(SMALL_TIME_SLEEP)
-        driver.find_element_by_link_text("Esporta").click()
-        time.sleep(time_before_closing_download)
-        try:
-            driver.find_element_by_xpath("//img[@alt='X']").click()
-        except:
-            pass
-        time.sleep(10)
+            # open Excel tab
+            driver.find_element_by_link_text("Excel").click()
+            time.sleep(SMALL_TIME_SLEEP)
+            # open Excel options
+            tt = True
+            while tt:     # there could be lag in opening the excel tab
+                try:
+                    driver.find_element_by_xpath("//div[@id='export-component-exportoptions']/div/a/img").click()
+                    time.sleep(SMALL_TIME_SLEEP)
+                    tt = False
+                except:
+                    pass        
+            # uncheck "include research strategy"
+            driver.find_element_by_xpath("//label[@name='component.SearchStrategy']").click()
+            time.sleep(SMALL_TIME_SLEEP)
+            # close Excel options
+            driver.find_element_by_xpath("//div[@id='export-component-exportoptions']/div/a/img").click()
+            time.sleep(SMALL_TIME_SLEEP)
+            # select export list cell
+            driver.find_element_by_id("component_selectedFormatId").click()
+            time.sleep(SMALL_TIME_SLEEP)
+            # select Orbis_columns_set
+            Select(driver.find_element_by_id("component_selectedFormatId")).select_by_visible_text(Orbis_columns_set)
+            time.sleep(SMALL_TIME_SLEEP)
+            # select export from...to
+            driver.find_element_by_id("component_RangeOptionSelectedId").click()
+            time.sleep(SMALL_TIME_SLEEP)
+            driver.find_element_by_id("component_RangeOptionSelectedId").click()
+            time.sleep(SMALL_TIME_SLEEP)
+            Select(driver.find_element_by_id("component_RangeOptionSelectedId")).select_by_visible_text(u"Un gruppo di società")
+            time.sleep(SMALL_TIME_SLEEP)
+            driver.find_element_by_name("component.From").click()
+            time.sleep(SMALL_TIME_SLEEP)
+            driver.find_element_by_name("component.From").clear()
+            time.sleep(SMALL_TIME_SLEEP)
+            driver.find_element_by_name("component.From").send_keys(str(row_start))
+            time.sleep(SMALL_TIME_SLEEP)
+            driver.find_element_by_name("component.To").click()
+            time.sleep(SMALL_TIME_SLEEP)
+            driver.find_element_by_name("component.To").clear()
+            time.sleep(SMALL_TIME_SLEEP)
+            driver.find_element_by_name("component.To").send_keys(str(row_end))
+            time.sleep(SMALL_TIME_SLEEP)
+            # write export file's name
+            driver.find_element_by_id("component_FileName").click()
+            time.sleep(SMALL_TIME_SLEEP)
+            driver.find_element_by_id("component_FileName").clear()
+            time.sleep(SMALL_TIME_SLEEP)
+            driver.find_element_by_id("component_FileName").send_keys("Chunk_"+str(chunk_i+1).zfill(3))
+            time.sleep(SMALL_TIME_SLEEP)
+            # click "Export"
+            driver.find_element_by_link_text("Esporta").click()
+            time.sleep(time_before_closing_download)
+            try:
+                driver.find_element_by_xpath("//img[@alt='X']").click()
+            except:
+                pass
+            time.sleep(10)
         
     print('\n\nTotal elapsed time:', str(datetime.timedelta(seconds=round(timer()-start))))
     print('\nBrowser can be closed. If exported files are not automatically downloaded, please check the Orbis "Export" tab in browser.')
-    
-    # save list of chunks' rows
-    with open('Chunks_list.txt', 'w') as f:
-        f.write('\n'.join(['Chunk ' + str(ind+1) + ': ' + '-'.join([str(i) for i in x]) for ind, x in enumerate(chunk_index)]))
-    print('\n\nChunks list saved into "Chunks_list.txt"')
+    print('\n\nChunks list saved into "' + LOG_FILE + '"')
     
     # disconnect
     #     time.sleep(60*3)
