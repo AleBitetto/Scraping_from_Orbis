@@ -42,4 +42,4 @@ Simply run the [notebook](https://github.com/AleBitetto/Scraping_from_Orbis/blob
 ### Notes
 
 Current version works with the Italian language settings and Orbis settings as described in the notebook.
-[Katalon Recorder](https://www.katalon.com/resources-center/blog/katalon-automation-recorder/) extension has been used in order to manually record the steps and convert them into Selenium code.
+[Katalon Recorder](https://www.katalon.com/resources-center/blog/katalon-automation-recorder/) extension [here](https://chrome.google.com/webstore/detail/katalon-recorder-selenium/ljdobmomdgdljniojadhoplhkpialdid) has been used in order to manually record the steps and convert them into Selenium code.
