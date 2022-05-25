@@ -22,7 +22,7 @@ To download data, this notebook relies on [`selenium`](https://selenium-python.r
 
 This requires a `chromedriver` executable which can be downloaded [here](https://chromedriver.chromium.org/downloads). Make sure that your `Chrome` version is the same as your `chromedriver` version.
 
-`Sccraping_Orbis` assumes that the `chromedriver` executable is located at `/WebDriver` in the main folder. To supply a different path, change the variable `chromedriver_path` in the notebook.
+`Scraping_Orbis` assumes that the `chromedriver` executable is located at `/WebDriver` in the main folder. To supply a different path, change the variable `chromedriver_path` in the notebook.
 
 ### Credentials
 
