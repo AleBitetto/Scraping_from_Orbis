@@ -39,6 +39,18 @@ dependencies:
   - wheel=0.37.1=pyhd8ed1ab_0
   - zeromq=4.3.4=h0e60522_1
   - pip:
+    - beautifulsoup4==4.11.1
+    - bs4==0.0.1
+    - mouseinfo==0.1.3
+    - pillow==8.4.0
+    - pyautoit==0.6.5
+    - pygetwindow==0.0.9
+    - pymsgbox==1.0.9
+    - pyperclip==1.8.2
+    - pyrect==0.2.0
+    - pyscreeze==0.1.28
+    - pytweening==1.0.4
     - selenium==3.141.0
+    - soupsieve==2.3.2.post1
     - urllib3==1.26.8
 prefix: C:\ProgramData\Anaconda3\envs\scraping_Orbis
