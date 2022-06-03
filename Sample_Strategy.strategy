@@ -1,0 +1,84 @@
+<Strategy>
+  <Header>
+    <Version>1</Version>
+    <Context Application="orbis" Database="Companies" />
+    <Date>Tuesday, 12 April 2022 16:59:21</Date>
+  </Header>
+  <Strategy Formula="0*1*2">
+    <Steps>
+      <Step UniqueId="Orbis:Search.Companies@Status" External="True" InvertSelection="False">
+        <ClientStep UniqueId="BvDLive:bvd.Common.BvDLive.Search.SearchStepDictionary+Status" InvertSelection="False">
+          <Parameters>
+            <Parameter Id="To" Type="ParameterDate" HasSelection="False" />
+            <Parameter Id="AndParameter" Type="ParameterBoolean" HasSelection="True" Value="False" />
+            <Parameter Id="From" Type="ParameterDate" HasSelection="False" />
+            <Parameter Id="StatusDateChoice" Type="ParameterId" HasSelection="True" Value="C" />
+            <Parameter Id="NoSatusDataGiven" Type="ParameterBoolean" HasSelection="True" Value="False" />
+            <Parameter Id="IdParameter" Type="ParameterId" Multiple="True" HasSelection="True">
+              <Action Type="SingleAdd" ItemId="ActiveRootKeys" />
+            </Parameter>
+          </Parameters>
+          <Comments>
+            <Comment>
+              <Key>FromToParameter</Key>
+              <Text>ParameterDate</Text>
+            </Comment>
+          </Comments>
+        </ClientStep>
+        <Comments>
+          <Comment>
+            <Key>XmlBag\ControllerBag</Key>
+            <XmlText>
+              <PageId>Status</PageId>
+            </XmlText>
+          </Comment>
+        </Comments>
+      </Step>
+      <Step UniqueId="Orbis:Search.Companies@CountryRegion" InvertSelection="False">
+        <Parameters>
+          <Parameter Key="FINDALPHA.FirstWord" Id="FirstWord" Type="ParameterBoolean" HasSelection="True" Value="False" />
+          <Parameter Id="Id" Type="ParameterId" Multiple="True" HasSelection="True">
+            <Action Type="SingleAdd" ItemId="9IT" />
+          </Parameter>
+          <Parameter Id="AddressType" Type="ParameterId" Multiple="True" HasSelection="True">
+            <Action Type="SingleAdd" ItemId="PriorityOnly" />
+          </Parameter>
+          <Parameter Key="FINDALPHA.FreeText" Id="FreeText" Type="ParameterFreeText" HasSelection="True" Value="ita" />
+          <Parameter Key="FINDALPHA.WholeWord" Id="WholeWord" Type="ParameterBoolean" HasSelection="True" Value="False" />
+        </Parameters>
+        <Comments>
+          <Comment>
+            <Key>XmlBag\ControllerBag</Key>
+            <XmlText>
+              <PageId>CountryRegion</PageId>
+            </XmlText>
+          </Comment>
+        </Comments>
+      </Step>
+      <Step UniqueId="Orbis:Search.Companies@Nace2" InvertSelection="False">
+        <Parameters>
+          <Parameter Id="Code" Type="ParameterId" Multiple="True" HasSelection="True">
+            <Action Type="SingleAdd" Array="raw_semicolon_separated" ItemId="4941;495;52;551;553;552" />
+          </Parameter>
+          <Parameter Key="FINDALPHA.Synonym" Id="Synonym" Type="ParameterBoolean" HasSelection="True" Value="True" />
+          <Parameter Id="CodeType" Type="ParameterId" HasSelection="True" Value="Primary" />
+          <Parameter Key="FINDALPHA.FirstWord" Id="FirstWord" Type="ParameterBoolean" HasSelection="True" Value="False" />
+          <Parameter Id="IncludeExclude" Type="ParameterId" HasSelection="True" Value="INCLUDE" />
+          <Parameter Key="FINDALPHA.FreeText" Id="FreeText" Type="ParameterFreeText" HasSelection="False" />
+          <Parameter Key="FINDALPHA.WholeWord" Id="WholeWord" Type="ParameterBoolean" HasSelection="True" Value="False" />
+        </Parameters>
+        <Comments>
+          <Comment>
+            <Key>XmlBag\ControllerBag</Key>
+            <XmlText>
+              <PageId>IndustryClassifications</PageId>
+            </XmlText>
+          </Comment>
+        </Comments>
+      </Step>
+    </Steps>
+    <Comments>
+      <MvcComment value="" />
+    </Comments>
+  </Strategy>
+</Strategy>
