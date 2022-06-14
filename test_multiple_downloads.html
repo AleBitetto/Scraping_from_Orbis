@@ -1,0 +1,26 @@
+<html>
+
+<body>
+    <button>DOWNLOAD</button>
+    <script>
+        const downloadToFile = (content, filename, contentType) => {
+            const a = document.createElement('a');
+            const file = new Blob([content], { type: contentType });
+            a.href = URL.createObjectURL(file);
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(a.href);
+        };
+
+        document.querySelector('button').addEventListener('click', () => {
+            downloadToFile(JSON.stringify({
+                test: 'content'
+            }), 'bin.bin', 'application/octet-stream');
+            downloadToFile(JSON.stringify({
+                test: 'content'
+            }), 'json.json', 'application/json');
+        });
+    </script>
+</body>
+
+</html>
