@@ -113,18 +113,15 @@ def login_and_reset(chromedriver_path=None, use_proxy=False, user_agent=None,
     driver.find_element_by_id("user").send_keys(Orbis_username)
     driver.find_element_by_id("pw").clear()
     driver.find_element_by_id("pw").send_keys(Orbis_pass)
-    driver.find_element_by_id("user").click()
-    driver.find_element_by_id("loginPage").click()
-    driver.find_element_by_xpath("//div[@id='loginPage']/div[2]").click()
     driver.find_element_by_xpath("//div[@id='loginPage']/div[2]/div[3]/button").click()
     time.sleep(2)
-    driver.find_element_by_xpath("//input[@value='Accept']").click()
     # check for session restart
     try:
         driver.find_element_by_xpath("//input[@value='Restart']").click()
         print("SESSION RESTART DONE", end ="\n")
     except:
         print("OK", end ="\n")
+    driver.find_element_by_xpath("//input[@value='Accept']").click()
         
     return driver
 
@@ -364,33 +361,6 @@ def upload_strategy(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None, PR
                              PROXY_PORT=PROXY_PORT, PROXY_USER=PROXY_USER, PROXY_PASS=PROXY_PASS,
                              Orbis_landing_page=Orbis_landing_page, Orbis_username=Orbis_username, Orbis_pass=Orbis_pass)
     
-#     # open browser and go to website
-#     print("Launching Chrome...", end ="")
-#     driver = get_chromedriver(chromedriver_path = chromedriver_path, use_proxy=True,
-#                               PROXY_HOST=PROXY_HOST, PROXY_PORT=PROXY_PORT, PROXY_USER=PROXY_USER, PROXY_PASS=PROXY_PASS)
-#     driver.implicitly_wait(5)
-#     driver.get(Orbis_landing_page)
-#     print("OK", end ="\n")
-
-#     # login
-#     print("Logging in...", end ="")
-#     driver.find_element_by_id("user").clear()
-#     driver.find_element_by_id("user").send_keys(Orbis_username)
-#     driver.find_element_by_id("pw").clear()
-#     driver.find_element_by_id("pw").send_keys(Orbis_pass)
-#     driver.find_element_by_id("user").click()
-#     driver.find_element_by_id("loginPage").click()
-#     driver.find_element_by_xpath("//div[@id='loginPage']/div[2]").click()
-#     driver.find_element_by_xpath("//div[@id='loginPage']/div[2]/div[3]/button").click()
-#     time.sleep(2)
-#     driver.find_element_by_xpath("//input[@value='Accept']").click()
-#     # check for session restart
-#     try:
-#         driver.find_element_by_xpath("//input[@value='Restart']").click()
-#         print("SESSION RESTART DONE", end ="\n")
-#     except:
-#         print("OK", end ="\n")
-
     # open search tab
     print("Opening search tab...", end ="")
     driver.find_element_by_xpath("//div[@id='search-toolbar']/div/div/ul/li[2]/h4").click()
@@ -450,34 +420,7 @@ def get_number_of_firms(chromedriver_path=None, PROXY_HOST=None, PROXY_PORT=None
     driver = login_and_reset(chromedriver_path=chromedriver_path, use_proxy=True, PROXY_HOST=PROXY_HOST,
                              PROXY_PORT=PROXY_PORT, PROXY_USER=PROXY_USER, PROXY_PASS=PROXY_PASS,
                              Orbis_landing_page=Orbis_landing_page, Orbis_username=Orbis_username, Orbis_pass=Orbis_pass)
-    
-#     # open browser and go to website
-#     print("Launching Chrome...", end ="")
-#     driver = get_chromedriver(chromedriver_path = chromedriver_path, use_proxy=True,
-#                               PROXY_HOST=PROXY_HOST, PROXY_PORT=PROXY_PORT, PROXY_USER=PROXY_USER, PROXY_PASS=PROXY_PASS)
-#     driver.implicitly_wait(5)
-#     driver.get(Orbis_landing_page)
-#     print("OK", end ="\n")
-
-#     # login
-#     print("Logging in...", end ="")
-#     driver.find_element_by_id("user").clear()
-#     driver.find_element_by_id("user").send_keys(Orbis_username)
-#     driver.find_element_by_id("pw").clear()
-#     driver.find_element_by_id("pw").send_keys(Orbis_pass)
-#     driver.find_element_by_id("user").click()
-#     driver.find_element_by_id("loginPage").click()
-#     driver.find_element_by_xpath("//div[@id='loginPage']/div[2]").click()
-#     driver.find_element_by_xpath("//div[@id='loginPage']/div[2]/div[3]/button").click()
-#     time.sleep(2)
-#     driver.find_element_by_xpath("//input[@value='Accept']").click()
-#     # check for session restart
-#     try:
-#         driver.find_element_by_xpath("//input[@value='Restart']").click()
-#         print("SESSION RESTART DONE", end ="\n\n")
-#     except:
-#         print("OK", end ="\n\n")
-        
+          
     # load search and save number of firms
     tot_firms_overall = 0
     for st_i, st in enumerate(strategy_list):
