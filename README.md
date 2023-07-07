@@ -37,7 +37,7 @@ where you need to write the Orbis username and password and Ateneo credentials (
 
 ### Usage
 
-Simply run the [notebook](https://github.com/AleBitetto/Scraping_from_Orbis/blob/master/Scraping%20from%20Orbis.ipynb).
+Simply run this [notebook](https://github.com/AleBitetto/Scraping_from_Orbis/blob/master/Scraping%20from%20Orbis.ipynb) for single extraction or this [notebook](https://github.com/AleBitetto/Scraping_from_Orbis/blob/master/Scraping%20from%20Orbis%20-%20Multiple.ipynb) for multiple extractions.
 
 ### Notes
 
